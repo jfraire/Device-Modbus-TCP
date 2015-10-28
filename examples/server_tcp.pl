@@ -25,8 +25,8 @@ use v5.10;
 }
 
 my $server = Device::Modbus::TCP::Server->new(
-    log_level => 2,
-    log_file  => 'logfile'
+    log_level => 4,
+#    log_file  => 'logfile'
 );
 
 my $unit = My::Unit->new(id => 3);

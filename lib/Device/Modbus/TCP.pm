@@ -16,7 +16,9 @@ our $VERSION = '0.020';
 ####
 
 sub read_port {
-    my ($self, $bytes, $pattern) = @_;
+    my ($self, $bytes) = @_;
+
+    return unless $bytes;
 
     my $sock = $self->socket;
     croak "Disconnected" unless $sock->connected;
@@ -36,8 +38,9 @@ sub read_port {
         }
     }
 
-#    say STDERR "Bytes: " . length($msg) . " MSG: " . join '-', unpack $pattern, $msg;
-    return unpack $pattern, $msg;
+    say STDERR "Bytes: " . length($msg) . " MSG: " . unpack 'H*', $msg;
+    $self->{buffer} = $msg;
+    return $msg;
 }
 
 sub write_port {
@@ -77,6 +80,14 @@ sub disconnect {
     $self->socket->close;
 }
 
+sub parse_buffer {
+    my ($self, $bytes, $pattern) = @_;
+    $self->read_port($bytes);
+    croak "Time out error" unless
+        defined $self->{buffer} && length($self->{buffer}) >= $bytes;    
+    return unpack $pattern, substr $self->{buffer},0,$bytes,'';
+}
+
 sub new_adu {
     my ($self, $msg) = @_;
     my $adu = Device::Modbus::TCP::ADU->new;
@@ -92,7 +103,7 @@ sub new_adu {
 
 sub parse_header {
     my ($self, $adu) = @_;
-    my ($id, $proto, $length, $unit) = $self->read_port(7, 'nnnC');
+    my ($id, $proto, $length, $unit) = $self->parse_buffer(7, 'nnnC');
     
     $adu->id($id);
     $adu->length($length);

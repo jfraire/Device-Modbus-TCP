@@ -3,6 +3,7 @@ package Device::Modbus::TCP::Server;
 use Device::Modbus;
 use Device::Modbus::TCP::ADU;
 use Device::Modbus::Exception;
+use Data::Dumper;
 use Try::Tiny;
 use Role::Tiny::With;
 use Carp;
@@ -49,7 +50,6 @@ sub request_for_others {
     );
 }
 
-use Data::Dumper;
 sub process_request {
     my $self = shift;
 
@@ -59,7 +59,7 @@ sub process_request {
             $req_adu = $self->receive_request;
         }
         catch {
-            unless (/Connection timed out/) {
+            unless (/Time out/) {
                 $self->log(2, "Error while waiting for request: $_");
             }
         };
