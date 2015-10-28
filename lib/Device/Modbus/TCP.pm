@@ -38,7 +38,7 @@ sub read_port {
         }
     }
 
-    say STDERR "Bytes: " . length($msg) . " MSG: " . unpack 'H*', $msg;
+#    say STDERR "Bytes: " . length($msg) . " MSG: " . unpack 'H*', $msg;
     $self->{buffer} = $msg;
     return $msg;
 }
