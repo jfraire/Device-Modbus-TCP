@@ -128,9 +128,9 @@ One of the goals for L<Device::Modbus> is to have the ability to write Modbus se
 
 =head1 USAGE
 
-Besides the description in L<Device::Modbus::Server>, this server obtains its functionality from L<Net::Server::PreFork>, from which it inherits. Be sure to read carefully their documentation.
+L<Device::Modbus::Server> inherits from L<Net::Server::PreFork>, so be sure to read carefully its documentation.
 
-Device::Modbus::Server::TCP binds to the given port (502 by default) and then forks C<min_servers> child processes. The server will make sure that at any given time there are C<min_spare_servers> available to receive a client request, up to C<max_servers>. Each of these children will process up to C<max_requests> client connections. This should allow for a heavily hit server.
+Device::Modbus::Server::TCP binds to the given port (502 by default) and then forks C<min_servers> child processes. The server will make sure that at any given time there are C<min_spare_servers> available to receive a client request, up to C<max_spare_servers>. Each of these children will process up to C<max_requests> client connections. This should allow for a heavily hit server.
 
 =head1 CONFIGURATION
 
@@ -157,35 +157,20 @@ This is where the generic Modbus server method is called. It listens for request
 
 =head1 NOTES
 
-In the examples directory, there is a program called LoadTester.pl which is a modified version of the one which comes with Net::Server. It uses a pre-forking client to issue as many requests as possible to a server and then reports its failure rate and load. This program was modified to work against the example server. It would be interesting to run the program in one computer and the server in another one to test server performance.
-
-While Modbus RTU processes are single-process, this server is not. It is important to notice that, because of its forking nature, each process has its own copy of the units you defined. While there are indeed mechanisms for them to communicate (see Net::Server), in general they are completely independent. Global variables are then global by process only and not accross the whole process group. This boils down to the fact that the example server in this distribution, which keeps register values in a per-process global variable, will not work in a real work scenario. It would be necessary to persist registers outside of the server, like in a database.
-
-Net::Server::PreFork is also at the heart of L<Starman>, a high-performance, Perl-based web server.
+While Modbus RTU processes are single-process, this server is not. It is important to notice that, because of its forking nature, each process has its own copy of the units you defined. While there are indeed mechanisms for them to communicate (see Net::Server), in general they are completely independent. Global variables are then global by process only and not accross the whole process group. This boils down to the fact that the example server in this distribution, which keeps register values in a per-process global variable, will not work in a real world scenario. It would be necessary to persist registers outside of the server, like in a database.
 
 =head1 SEE ALSO
 
-The documentation of the distribution is split among these different documents:
+Most of the functionality is described in L<Device::Modbus::Server>.
 
-=over
+=head2 Other distributions
 
-=item L<Device::Modbus>
-
-=item L<Device::Modbus::Client>
-
-=item L<Device::Modbus::Server>
-
-=item L<Device::Modbus::Server::TCP>
-
-=item L<Device::Modbus::Server::RTU>
-
-=item L<Device::Modbus::Spy>
-
-=back
+These are other implementations of Modbus in Perl which may be well suited for your application:
+L<Protocol::Modbus>, L<MBclient>, L<mbserverd|https://github.com/sourceperl/mbserverd>.
 
 =head1 GITHUB REPOSITORY
 
-You can find the repository of this distribution in L<GitHub|https://github.com/jfraire/Device-Modbus>.
+You can find the repository of this distribution in L<GitHub|https://github.com/jfraire/Device-Modbus-TCP>.
 
 =head1 AUTHOR
 
