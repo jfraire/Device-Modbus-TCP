@@ -92,9 +92,9 @@ sub process_request {
 }
 
 sub start {
-    my $self = shift;
+    my ($self, %args) = @_;
     $self->log(2, 'Starting server');
-    $self->run;
+    $self->run(%args);
 }
  
 1;
@@ -149,7 +149,7 @@ The methods defined by Net::Server::PreFork and used by Device::Modbus::Server::
 
 =head2 default_values
 
-This is used only to pass the default parameters of the server. Note that this is the lowest priority form of configuration; these values can be overwritten by passing arguments to C<new>, by passing command-line arguments, by passing arguments to C<run>, or by using a configuration file. You can, of course, write your own C<default_values> method in a sub-class.
+This is used only to pass the default parameters of the server. Note that this is the lowest priority form of configuration; these values can be overwritten by passing arguments to C<new>, by passing command-line arguments, by passing arguments to C<start>, or by using a configuration file. You can, of course, write your own C<default_values> method in a sub-class.
 
 =head2 process_request
 
