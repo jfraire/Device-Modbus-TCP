@@ -11,12 +11,12 @@ BEGIN {
     use_ok 'Test::Unit';
 }
 
-# Fork. Child builds a server who dies after one second
+# Fork. Child builds a server who dies after a couple of seconds
 $|++;
 my $pid = fork;
 unless (defined $pid && $pid) {
     # We are the child. Start a server.
-    # Send an alarm signal in one second.
+    # Send an alarm signal in two seconds.
     # Then, send a SIGINT to stop the server.
     $SIG{ALRM} = sub { kill 2, $$ };
     alarm(2);
