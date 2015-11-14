@@ -23,9 +23,15 @@ unless (defined $pid && $pid) {
 
     my $unit   = Test::Unit->new( id => 3 );
     my $server = Device::Modbus::TCP::Server->new(
-        port      => 6545,
-        log_level => 4,
-        log_file  => "/tmp/log$$"
+        port              => 6545,
+        log_level         => 4,
+        log_file          => "/tmp/log$$",
+        server_type       => ['PreFork'],
+        min_servers       => 5,
+        max_servers       => 10,
+        min_spare_servers => 1,
+        max_spare_servers => 5,
+        max_requests      => 1000,
     );
     $server->add_server_unit($unit);
     $server->start;

@@ -10,7 +10,7 @@ use Carp;
 use strict;
 use warnings;
 
-use parent qw(Device::Modbus::Server Net::Server::PreFork);
+use parent qw(Device::Modbus::Server Net::Server::MultiType);
 with  'Device::Modbus::TCP';
 
 sub new {
@@ -109,8 +109,11 @@ __END__
     use Device::Modbus::Server::TCP;
     use strict;
     use warnings;
-
+ 
+    my $unit = My::Unit->new( id => 3 );
+       
     my $server = Device::Modbus::Server::TCP->new(
+        server_type       => ['PreFork'],
         log_level         =>  2,
         min_servers       => 10,
         max_servers       => 30,
@@ -118,8 +121,8 @@ __END__
         max_spare_servers => 10,
         max_requests      => 1000,
     );
-
-    $server->add_server_unit('My::Unit', 1);
+ 
+    $server->add_server_unit($unit);
     $server->start;
 
 =head1 DESCRIPTION
@@ -128,13 +131,13 @@ One of the goals for L<Device::Modbus> is to have the ability to write Modbus se
 
 =head1 USAGE
 
-L<Device::Modbus::Server> inherits from L<Net::Server::PreFork>, so be sure to read carefully its documentation.
+L<Device::Modbus::Server> inherits from L<Net::Server::MultiType>, so be sure to read carefully its documentation. You can pass Net::Server::MultiType parameters via the C<new> constructor, via the C<start> method, or using a configuration file as defined by the C<conf_file> argument described in L<Net::Derver>. Note that C<start> is just a wrapper for Net::Server's C<run>.
 
-Device::Modbus::Server::TCP binds to the given port (502 by default) and then forks C<min_servers> child processes. The server will make sure that at any given time there are C<min_spare_servers> available to receive a client request, up to C<max_spare_servers>. Each of these children will process up to C<max_requests> client connections. This should allow for a heavily hit server.
+The example in the synopsis of this document is using the PreFork personality of Net::Server. If you do not specify a personality, it will default to Single.
 
 =head1 CONFIGURATION
 
-All the configuration possibilities found in L<Net::Server::PreFork> are available. The default parameters for Device::Modbus::Server::TCP are:
+All the configuration possibilities found in L<Net::Server::MultiType> are available. The default parameters for Device::Modbus::Server::TCP are:
 
     log_level   => 2,
     log_file    => undef,
@@ -143,9 +146,9 @@ All the configuration possibilities found in L<Net::Server::PreFork> are availab
     ipv         => 4,
     proto       => 'tcp',
 
-=head1 Net::Server::PreFork METHODS USED
+=head1 Net::Server::MultiType METHODS USED
 
-The methods defined by Net::Server::PreFork and used by Device::Modbus::Server::TCP are:
+The methods defined by Net::Server::MultiType and used by Device::Modbus::Server::TCP are:
 
 =head2 default_values
 
@@ -154,6 +157,14 @@ This is used only to pass the default parameters of the server. Note that this i
 =head2 process_request
 
 This is where the generic Modbus server method is called. It listens for requests, processes them, and returns the responses.
+
+=head2 run
+
+The C<run> method is simply wrapped by this module's C<start> to keep a certain symmetry with Device::Modbus::RTU::Server.
+
+=head2 post_accept_hook
+
+This method is used to make the underlying socket available with the C<socket> method of the server.
 
 =head1 NOTES
 
@@ -183,8 +194,6 @@ Copyright (C) 2015 by Julio Fraire
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.14.2 or,
 at your option, any later version of Perl 5 you may have available.
-
-614 4 11 01 79
 
 =cut
 
