@@ -20,7 +20,13 @@ sub read_port {
 
     return unless $bytes;
 
-    my $sock = $self->socket;
+    my $sock;
+    my $socket_ok=0;
+    try{
+        $sock = $self->socket;
+    }
+    return unless $socket_ok;
+
     croak "Disconnected" unless $sock->connected;
 
     local $SIG{'ALRM'} = sub { croak "Connection timed out\n" };
