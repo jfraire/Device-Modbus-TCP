@@ -118,3 +118,57 @@ sub parse_footer {
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+Device::Modbus::TCP - Distribution for Modbus TCP communications
+
+=head1 SYNOPSIS
+
+#! /usr/bin/perl
+
+use Device::Modbus::TCP::Client;
+use Data::Dumper;
+use strict;
+use warnings;
+use v5.10;
+
+my $client = Device::Modbus::TCP::Client->new(
+    host => '192.168.1.34',
+);
+
+my $req = $client->read_holding_registers(
+    unit     => 3,
+    address  => 2,
+    quantity => 1
+);
+
+say Dumper $req;
+$client->send_request($req) || die "Send error: $!";
+my $response = $client->receive_response;
+say Dumper $response;
+
+$client->disconnect;
+
+=head1 DESCRIPTION
+
+Device::Modbus::TCP is a distribution which implements the Modbus TCP protocol on top of L<Device::Modbus>; it adds the capability of communicating via TCP sockets. Please see Device::Modbus to learn about its functionality, and L<Device::Modbus::TCP::Client> or L<Device::Modbus::TCP::Server> to see the particularities of the Modbus TCP implementation.
+
+=head1 GITHUB REPOSITORY
+
+You can find the repository of this distribution in L<GitHub|https://github.com/jfraire/Device-Modbus-TCP>.
+
+=head1 AUTHOR
+
+Julio Fraire, E<lt>julio.fraire@gmail.comE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2015 by Julio Fraire
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.14.2 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
