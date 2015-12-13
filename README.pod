@@ -1,6 +1,6 @@
-=head1 NAME Device-Modbus-TCP version 0.02
+=head1 NAME Device-Modbus-TCP version 0.021
 
-This distribution aims towards implementing the Modbus protocol over TCP/IP in Perl. It should make it possible to write Modbus TCP clients and servers.
+This distribution is a part of Device::Modbus, which aims towards implementing the Modbus protocol over TCP/IP in Perl. It should make it possible to write Modbus TCP clients and servers.
 
 In particular, servers should be able to execute arbitrary code to process requests. This will allow for applications such as Modbus gateways or database front-end applications that communicate directly with external devices. 
 
@@ -26,7 +26,7 @@ Currently, the distribution is under development. You can find more information 
 
 =back
 
-As of today, simple clients and servers both with Modbus RTU and Modbus TCP have been tested. Only the Modbus RTU clients have been tested with industrial equipment.
+As of today, simple clients and servers both with Modbus RTU and Modbus TCP have been tested. Both Modbus RTU and TCP clients have been tested with industrial equipment.
 
 =head2 INSTALLATION
 
@@ -42,6 +42,8 @@ To install this module type the following:
 This module requires these other non-standard modules and libraries:
 
 =over
+
+=item * Device::Modbus
 
 =item * Net::Server
 

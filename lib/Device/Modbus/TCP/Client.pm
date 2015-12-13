@@ -30,6 +30,10 @@ sub socket {
     return $self->{socket};
 }
 
+sub connected {
+    return defined $self->{socket} && $self->{socket}->connected;
+}
+
 sub _build_socket {
     my $self = shift;
     my $sock = IO::Socket::INET->new(
@@ -116,6 +120,14 @@ This method creates and returns a Device::Modbus::TCP::Client object. It takes t
 Defaults to 2 seconds.
 
 =back
+
+=head2 socket
+
+Returns the IO::Socket::INET object used by the client.
+
+=head2 connected
+
+Returns true if the socket object exists and if it is connected.
 
 =head2 disconnect
 

@@ -26,6 +26,13 @@ sub length {
     return $self->{length};
 }
 
+# Modbus TCP states unit number is 0xFF by default 
+sub unit {
+    my $self = shift;
+    $_[0] = 0xFF unless exists $self->{unit} || defined $_[0];
+    return $self->SUPER::unit(@_);
+}    
+
 sub binary_message {
     my $self = shift;
     croak "Please include a unit number in the ADU."

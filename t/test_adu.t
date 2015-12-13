@@ -1,7 +1,7 @@
 #! /usr/bin/env perl
 
 use Device::Modbus::Request;
-use Test::More tests => 16;
+use Test::More tests => 15;
 use strict;
 use warnings;
 
@@ -57,7 +57,7 @@ BEGIN {
         'Binary message was calculated correctly';
 }
 
-# This one dies
+# This one uses default unit number of 0xFF
 {
     my $adu = Device::Modbus::TCP::ADU->new(
         id      => 3,
@@ -68,10 +68,7 @@ BEGIN {
         )
     );
     isa_ok $adu, 'Device::Modbus::ADU';
-    eval { $adu->binary_message };
-    ok defined $@, 'Binary message dies if unit number is not defined';
-    like $@, qr/Please include a unit/,
-        'And the error message is correct';
+    is $adu->unit, 0xFF, 'Unit number by default is 0xFF'
 }
 
 done_testing();

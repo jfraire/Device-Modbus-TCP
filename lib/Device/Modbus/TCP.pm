@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use v5.10;
 
-our $VERSION = '0.020';
+our $VERSION = '0.022';
 
 ####
 
