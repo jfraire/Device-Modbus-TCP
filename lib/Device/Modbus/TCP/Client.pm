@@ -31,6 +31,7 @@ sub socket {
 }
 
 sub connected {
+    my $self = shift;
     return defined $self->{socket} && $self->{socket}->connected;
 }
 
