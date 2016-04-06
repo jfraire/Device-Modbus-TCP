@@ -9,9 +9,8 @@ use Role::Tiny;
 use Carp;
 use strict;
 use warnings;
-use v5.10;
 
-our $VERSION = '0.022';
+our $VERSION = '0.023';
 
 ####
 
@@ -34,7 +33,7 @@ sub read_port {
             redo RECEIVE;
         }
         if (!defined $rc) {
-                croak "Communication error while reading request: $!";
+            croak "Communication error while reading request: $!";
         }
     }
 

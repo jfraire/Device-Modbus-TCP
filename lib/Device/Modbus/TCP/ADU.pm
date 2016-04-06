@@ -4,7 +4,6 @@ use parent 'Device::Modbus::ADU';
 use Carp;
 use strict;
 use warnings;
-use v5.10;
 
 sub id {
     my ($self, $value) = @_;
@@ -36,7 +35,7 @@ sub unit {
 sub binary_message {
     my $self = shift;
     croak "Please include a unit number in the ADU."
-        unless $self->{unit};
+        unless $self->unit;
     my $header = $self->build_header;
     my $pdu    = $self->message->pdu();
     return $header . $pdu;
