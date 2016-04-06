@@ -6,7 +6,7 @@ WriteMakefile(
     NAME              => 'Device::Modbus::TCP',
     VERSION_FROM      => 'lib/Device/Modbus/TCP.pm',
     PREREQ_PM         => {
-		'Device::Modbus'     => 0.21,
+		'Device::Modbus'     => 0.021,
 		'Try::Tiny'          => 0.22,
 		'Role::Tiny'         => 2.0,
 		'Net::Server'        => 2.008,
