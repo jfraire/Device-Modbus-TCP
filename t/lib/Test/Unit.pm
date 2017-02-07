@@ -1,5 +1,8 @@
 package Test::Unit;
+
 use parent 'Device::Modbus::Unit';
+use strict;
+use warnings;
 
 sub init_unit {
     my $unit = shift;
