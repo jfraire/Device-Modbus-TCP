@@ -1,4 +1,4 @@
-=head1 NAME Device-Modbus-TCP version 0.023
+=head1 NAME Device-Modbus-TCP version 0.024
 
 This distribution is a part of Device::Modbus, which aims towards implementing the Modbus protocol over TCP/IP in Perl. It should make it possible to write Modbus TCP clients and servers.
 
