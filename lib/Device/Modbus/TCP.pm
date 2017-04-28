@@ -10,7 +10,7 @@ use Carp;
 use strict;
 use warnings;
 
-our $VERSION = '0.023';
+our $VERSION = '0.024';
 
 ####
 
@@ -23,19 +23,24 @@ sub read_port {
     croak "Disconnected" unless $sock->connected;
 
     local $SIG{'ALRM'} = sub { croak "Connection timed out\n" };
+    alarm $self->{timeout};
 
-    my $msg;
-    RECEIVE : {
-        alarm $self->{timeout};
-        my $rc = $self->socket->recv($msg, $bytes);
-        alarm 0;
-        if (exists $!{EINTR} && $!{EINTR} || length($msg) == 0) {
-            redo RECEIVE;
+    my $msg = '';
+    do {
+        my $read;
+        my $rc = $self->socket->recv($read, $bytes - length($msg));
+        $msg .= $read;
+        if ($!{EINTR}) {
+            # Shutdowns socket in case of timeout
+            $self->socket->shutdown(2);
+            last;
         }
         if (!defined $rc) {
-            croak "Communication error while reading request: $!";
+            croak "Communication error while receiving data: $!";
         }
     }
+    while (length($msg) < $bytes);        
+    alarm 0;
 
 #    say STDERR "Bytes: " . length($msg) . " MSG: " . unpack 'H*', $msg;
     $self->{buffer} = $msg;
@@ -126,30 +131,30 @@ Device::Modbus::TCP - Distribution for Modbus TCP communications
 
 =head1 SYNOPSIS
 
-#! /usr/bin/perl
+ #! /usr/bin/perl
+ 
+ use Device::Modbus::TCP::Client;
+ use Data::Dumper;
+ use strict;
+ use warnings;
+ use v5.10;
+ 
+ my $client = Device::Modbus::TCP::Client->new(
+     host => '192.168.1.34',
+ );
+ 
+ my $req = $client->read_holding_registers(
+     unit     => 3,
+     address  => 2,
+     quantity => 1
+ );
 
-use Device::Modbus::TCP::Client;
-use Data::Dumper;
-use strict;
-use warnings;
-use v5.10;
-
-my $client = Device::Modbus::TCP::Client->new(
-    host => '192.168.1.34',
-);
-
-my $req = $client->read_holding_registers(
-    unit     => 3,
-    address  => 2,
-    quantity => 1
-);
-
-say Dumper $req;
-$client->send_request($req) || die "Send error: $!";
-my $response = $client->receive_response;
-say Dumper $response;
-
-$client->disconnect;
+ say Dumper $req;
+ $client->send_request($req) || die "Send error: $!";
+ my $response = $client->receive_response;
+ say Dumper $response;
+ 
+ $client->disconnect;
 
 =head1 DESCRIPTION
 

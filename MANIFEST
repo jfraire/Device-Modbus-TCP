@@ -1,5 +1,4 @@
 Changes
-Device-Modbus-TCP-0.020.tar.gz
 examples/client_tcp.pl
 examples/server_tcp.pl
 lib/Device/Modbus/TCP.pm
@@ -13,3 +12,5 @@ README.pod
 t/lib/Test/Unit.pm
 t/test_adu.t
 t/test_server_client.t
+t/test_server_client_broken_msg.t
+t/test_server_client_disconnect.t

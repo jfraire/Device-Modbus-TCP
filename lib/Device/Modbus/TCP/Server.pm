@@ -59,7 +59,8 @@ sub process_request {
             $req_adu = $self->receive_request;
         }
         catch {
-            unless (/Time out/) {
+            if (/Timed? out|Disconnect/i) {
+                $self->log(4, "Client timed out or disconnected: $_");
                 $self->log(2, "Error while waiting for request: $_");
             }
         };
