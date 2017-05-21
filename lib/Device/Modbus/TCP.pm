@@ -10,7 +10,7 @@ use Carp;
 use strict;
 use warnings;
 
-our $VERSION = '0.024';
+our $VERSION = '0.025';
 
 ####
 
@@ -30,7 +30,7 @@ sub read_port {
         my $read;
         my $rc = $self->socket->recv($read, $bytes - length($msg));
         $msg .= $read;
-        if ($!{EINTR}) {
+        if ($!{EINTR} || length($msg) == 0) {
             # Shutdowns socket in case of timeout
             $self->socket->shutdown(2);
             last;
