@@ -10,7 +10,7 @@ use Carp;
 use strict;
 use warnings;
 
-our $VERSION = '0.025';
+our $VERSION = '0.026';
 
 ####
 
@@ -33,13 +33,12 @@ sub read_port {
         if ($!{EINTR} || length($msg) == 0) {
             # Shutdowns socket in case of timeout
             $self->socket->shutdown(2);
-            last;
         }
         if (!defined $rc) {
             croak "Communication error while receiving data: $!";
         }
     }
-    while (length($msg) < $bytes);        
+    while ($self->socket->connected && length($msg) < $bytes);        
     alarm 0;
 
 #    say STDERR "Bytes: " . length($msg) . " MSG: " . unpack 'H*', $msg;

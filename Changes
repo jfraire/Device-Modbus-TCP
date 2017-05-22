@@ -13,3 +13,6 @@ Revision history for Perl extension Device::Modbus::TCP.
     - Client disconnection was still not treated correctly, as
       messages were reported as empty. Thanks to Manuel Krenzke and to
       Olivier Colin for their bug reports and their fixes.
+0.026 2017-05-22
+    - Client disconnection was *still* not treated correctly.
+      Thanks again to Manuel Krenzke.
