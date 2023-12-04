@@ -1,7 +1,7 @@
 package Device::Modbus::TCP;
 
 use Device::Modbus::TCP::ADU;
-use IO::Socket::INET;
+use IO::Socket::IP;
 use Errno qw(:POSIX);
 use Time::HiRes qw(time);
 use Try::Tiny;

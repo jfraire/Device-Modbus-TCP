@@ -36,7 +36,7 @@ sub connected {
 
 sub _build_socket {
     my $self = shift;
-    my $sock = IO::Socket::INET->new(
+    my $sock = IO::Socket::IP->new(
         PeerAddr  => $self->{host},
         PeerPort  => $self->{port},
         Blocking  => $self->{blocking},
@@ -123,7 +123,7 @@ Defaults to 2 seconds.
 
 =head2 socket
 
-Returns the IO::Socket::INET object used by the client.
+Returns the IO::Socket::IP object used by the client.
 
 =head2 connected
 
