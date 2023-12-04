@@ -16,3 +16,5 @@ Revision history for Perl extension Device::Modbus::TCP.
 0.026 2017-05-22
     - Client disconnection was *still* not treated correctly.
       Thanks again to Manuel Krenzke.
+0.027 Not Yet Released
+	- Changed from IO::Socket::INET to IO::Socket::IP for IPv6 support.
